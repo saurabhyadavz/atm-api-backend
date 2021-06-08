@@ -9,10 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AtmService {
 	
-	private List<atm> lists= new ArrayList<atm>(
-			Arrays.asList(
-			new atm("21","saurabh","yadav"),
-			new atm("23","aman","dwivedi")));
+	private List<atm> lists= new ArrayList<atm>(Arrays.asList(new atm("21","saurabh","yadav")));
 	
 	public List<atm> getuserInfo(){
 		return lists;
