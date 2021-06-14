@@ -1,4 +1,4 @@
-package com.atmapi.data;
+package com.atmapi.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

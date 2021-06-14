@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.atmapi.data.Customer;
-import com.atmapi.services.AtmService;
+import com.atmapi.model.Customer;
+import com.atmapi.services.AtmServiceImp;
 
 
 
@@ -23,7 +23,7 @@ import com.atmapi.services.AtmService;
 public class AtmController {
 	
 	 @Autowired
-	 private AtmService atmService;
+	 private AtmServiceImp atmServiceImp;
 	
 	
 
@@ -31,33 +31,34 @@ public class AtmController {
 	@CrossOrigin(origins="http://localhost:3000")
 	public String withdraw(@RequestBody Customer atmx) {
 		System.out.println("Withdraw");
-		return atmService.withdraw(atmx);
+		return atmServiceImp.withdraw(atmx);
 	}
 	
 	@RequestMapping(method=RequestMethod.PUT, value="/deposit")
 	@CrossOrigin(origins="http://localhost:3000")
 	public String deposit(@RequestBody Customer c1) {
 		
-		return atmService.deposit(c1);
+		return atmServiceImp.deposit(c1);
 	}
 	@RequestMapping(method=RequestMethod.GET, value="/checkBalance")
 	@CrossOrigin(origins="http://localhost:3000")
 	public Optional<Customer> checkBalance(@RequestParam(value = "accountNumber", defaultValue = "0") String accountNumber) {
 		
-		return atmService.checkBalance(accountNumber);
+		return atmServiceImp.checkBalance(accountNumber);
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, value="/details")
 	@CrossOrigin(origins="http://localhost:3000")
 	public Optional<Customer> details(@RequestParam(value = "accountNumber", defaultValue = "0") String accountNumber) {
 		
-		return atmService.details(accountNumber);
+		return atmServiceImp.details(accountNumber);
 	}
-	//adding some customers to backend
-	@RequestMapping(method=RequestMethod.POST, value="/add")
+
+	//For Testing
+	@RequestMapping(method=RequestMethod.POST, value="/addData")
 	public String addData(@RequestBody Customer c1) {
-		System.out.println("check");
-		return atmService.addData(c1);
+
+		return atmServiceImp.addData(c1);
 	}
 	
 
