@@ -5,6 +5,8 @@ package com.atmapi.controller;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,36 +31,39 @@ public class AtmController {
 
 	@RequestMapping(method=RequestMethod.PUT, value="/withdraw")
 	@CrossOrigin(origins="http://localhost:3000")
-	public String withdraw(@RequestBody Customer atmx) {
-		System.out.println("Withdraw");
+	public ResponseEntity<Object> withdraw(@RequestBody Customer atmx) {
+
 		return atmServiceImp.withdraw(atmx);
 	}
 	
 	@RequestMapping(method=RequestMethod.PUT, value="/deposit")
 	@CrossOrigin(origins="http://localhost:3000")
-	public String deposit(@RequestBody Customer c1) {
+	public ResponseEntity<Object> deposit(@RequestBody Customer c1) {
 		
 		return atmServiceImp.deposit(c1);
 	}
+
 	@RequestMapping(method=RequestMethod.GET, value="/checkBalance")
 	@CrossOrigin(origins="http://localhost:3000")
-	public Optional<Customer> checkBalance(@RequestParam(value = "accountNumber", defaultValue = "0") String accountNumber) {
-		
-		return atmServiceImp.checkBalance(accountNumber);
+	public ResponseEntity<Object> checkBalance(@RequestParam(value = "accountNumber", defaultValue = "0") String accountNumber) {
+		Optional<Customer> c=atmServiceImp.checkBalance(accountNumber);
+		return new ResponseEntity<>(c,HttpStatus.OK);
+
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, value="/details")
 	@CrossOrigin(origins="http://localhost:3000")
-	public Optional<Customer> details(@RequestParam(value = "accountNumber", defaultValue = "0") String accountNumber) {
-		
-		return atmServiceImp.details(accountNumber);
+	public ResponseEntity<Object> details(@RequestParam(value = "accountNumber", defaultValue = "0") String accountNumber) {
+		Optional<Customer> c=atmServiceImp.details(accountNumber);
+		return new ResponseEntity<>(c,HttpStatus.OK);
 	}
 
 	//For Testing
 	@RequestMapping(method=RequestMethod.POST, value="/addData")
-	public String addData(@RequestBody Customer c1) {
+	public ResponseEntity<Object> addData(@RequestBody Customer c1) {
+		atmServiceImp.addData(c1);
+		return new ResponseEntity<>(HttpStatus.OK);
 
-		return atmServiceImp.addData(c1);
 	}
 	
 

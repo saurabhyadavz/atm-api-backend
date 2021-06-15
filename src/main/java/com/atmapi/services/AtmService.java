@@ -1,13 +1,14 @@
 package com.atmapi.services;
 
 import com.atmapi.model.Customer;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Optional;
 
 public interface AtmService {
-    String withdraw(Customer c);
-    String deposit(Customer c);
+    ResponseEntity<Object> withdraw(Customer c);
+    ResponseEntity<Object> deposit(Customer c);
     Optional<Customer> checkBalance(String s);
     Optional<Customer> details(String s);
-    String addData(Customer c);
+    void addData(Customer c);
 }

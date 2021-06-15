@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.atmapi.dao.AtmRepository;
@@ -17,7 +19,7 @@ public class AtmServiceImp implements AtmService {
 	private AtmRepository atmRepo;
 
 	@Override
-	public String withdraw(Customer atmx) {
+	public ResponseEntity<Object> withdraw(Customer atmx) {
 		
 		List<Customer> details=new ArrayList<>();
 				
@@ -25,46 +27,44 @@ public class AtmServiceImp implements AtmService {
 		.forEach(details::add);
 				
 		if(atmx.getBalance()<=0)
-			return "Failure";
-		
-		for(int i=0;i<details.size();i++) {
-			 Customer a1=details.get(i);
-			 if(a1.getAccountNumber().equals(atmx.getAccountNumber()))
-			 {
-				 if(a1.getBalance()<atmx.getBalance()) {
-					 
-					 return "Failure";
-				 }
-				 a1.setBalance(a1.getBalance()-atmx.getBalance());
-				 atmRepo.save(a1);
-				
-			 }
-		 }
-		return "Success";
+			return new ResponseEntity<>(atmx, HttpStatus.METHOD_NOT_ALLOWED);
+
+		for (Customer a1 : details) {
+			if (a1.getAccountNumber().equals(atmx.getAccountNumber())) {
+				if (a1.getBalance() < atmx.getBalance()) {
+
+					return new ResponseEntity<>(atmx, HttpStatus.METHOD_NOT_ALLOWED);
+				}
+				a1.setBalance(a1.getBalance() - atmx.getBalance());
+				atmRepo.save(a1);
+
+			}
+		}
+		return new ResponseEntity<>(atmx, HttpStatus.OK);
 		
 	}
 
 
 	@Override
-	public String deposit(Customer atmx) {
+	public ResponseEntity<Object> deposit(Customer atmx) {
+
 		if(atmx.getBalance()<=0)
-			return "Failure";
+			return new ResponseEntity<>(atmx, HttpStatus.METHOD_NOT_ALLOWED);
 		List<Customer> details=new ArrayList<>();
 		
 		atmRepo.findAll()
 		.forEach(details::add);
-		
-		
-		for(int i=0;i<details.size();i++) {
-			 Customer a1=details.get(i);
-			 if(a1.getAccountNumber().equals(atmx.getAccountNumber()))
-			 {
-				 a1.setBalance(atmx.getBalance()+a1.getBalance());
-				 atmRepo.save(a1);
-				return "Success";
-			 }
-		 }
-		return "Failure";
+
+
+		for (Customer a1 : details) {
+			if (a1.getAccountNumber().equals(atmx.getAccountNumber())) {
+				a1.setBalance(atmx.getBalance() + a1.getBalance());
+				atmRepo.save(a1);
+				return new ResponseEntity<>(a1, HttpStatus.OK);
+			}
+		}
+
+		return new ResponseEntity<>(atmx, HttpStatus.METHOD_NOT_ALLOWED);
 		
 	}
 
@@ -81,9 +81,10 @@ public class AtmServiceImp implements AtmService {
 	}
 
 	@Override
-	public String addData(Customer c1) {
+	public void addData(Customer c1) {
 		atmRepo.save(c1);
-		return "Success";
+
+
 	}
 
 	
