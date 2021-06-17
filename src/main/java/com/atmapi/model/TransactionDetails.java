@@ -3,7 +3,6 @@ package com.atmapi.model;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.sql.Timestamp;
-import java.time.Instant;
 import javax.persistence.GeneratedValue;
 
 @Entity
@@ -14,17 +13,17 @@ public class TransactionDetails {
     private Long id;
     private String accountNumber;
     private double totalBalance;
-    private Timestamp time;
+    private String date;
     private String debit;
     private String credit;
     private double amount;
 
     private String transDetails;
 
-    public TransactionDetails(String accountNumber, double totalBalance,double amount, String debit, String credit, String transDetails) {
+    public TransactionDetails(String accountNumber, double totalBalance,double amount, String debit, String credit, String transDetails,String date) {
         this.accountNumber = accountNumber;
         this.totalBalance = totalBalance;
-        this.time = Timestamp.from( Instant.now());
+        this.date = date;
         this.debit = debit;
         this.credit = credit;
         this.transDetails = transDetails;
@@ -41,8 +40,8 @@ public class TransactionDetails {
         return totalBalance;
     }
 
-    public Timestamp getTime() {
-        return time;
+    public String getDate() {
+        return date;
     }
 
     public String getDebit() {

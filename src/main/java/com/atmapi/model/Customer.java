@@ -10,6 +10,21 @@ public class Customer {
 	@Id
 	private String accountNumber;
 	private double balance;
+	private String name;
+	private String aadhaarNo;
+	private String panNo;
+
+	public String getName() {
+		return name;
+	}
+
+	public String getAadhaarNo() {
+		return aadhaarNo;
+	}
+
+	public String getPanNo() {
+		return panNo;
+	}
 
 	public String getAccountNumber() {
 		return accountNumber;
@@ -25,12 +40,7 @@ public class Customer {
 		this.balance = balance;
 	}
 	
-	public Customer(String accountNumber, String firstName, String lastName) {
-		super();
-		this.accountNumber = accountNumber;
-		this.balance=10000;
-		
-	}
+
 	public Customer() {
 		super();
 		// TODO Auto-generated constructor stub

@@ -1,4 +1,5 @@
 package com.atmapi.services;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.atmapi.dao.TransactionRepository;
@@ -20,9 +21,14 @@ public class AtmServiceImp implements AtmService {
 
 	@Autowired
 	TransactionRepository transRepo;
+	private String pattern="yyyy-MM-dd";
 
 	@Override
 	public ResponseEntity<Object> withdraw(Customer atmx,String details) {
+
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+		String date = simpleDateFormat.format(new Date());
+
 		String id=atmx.getAccountNumber();
 		double amount=atmx.getBalance();
 		Customer c=atmRepo.findById(id).orElse(new Customer());
@@ -31,7 +37,7 @@ public class AtmServiceImp implements AtmService {
 			atmRepo.deleteById(id);
 			c.setBalance(balance-amount);
 			atmRepo.save(c);
-			TransactionDetails t=new TransactionDetails(c.getAccountNumber(),c.getBalance(),amount,"debit","",details);
+			TransactionDetails t=new TransactionDetails(c.getAccountNumber(),c.getBalance(),amount,"debit","",details,date);
 			transRepo.save(t);
 			return new ResponseEntity<>(atmx, HttpStatus.OK);
 		}
@@ -43,6 +49,9 @@ public class AtmServiceImp implements AtmService {
 
 	@Override
 	public ResponseEntity<Object> deposit(Customer request,String details) {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+		String date = simpleDateFormat.format(new Date());
+
 		String id = request.getAccountNumber();
 		double amount=request.getBalance();
 		Customer c=atmRepo.findById(id).orElse(new Customer());
@@ -51,7 +60,7 @@ public class AtmServiceImp implements AtmService {
 			atmRepo.deleteById(id);
 			c.setBalance(balance+amount);
 			atmRepo.save(c);
-			TransactionDetails t=new TransactionDetails(c.getAccountNumber(),c.getBalance(),amount,"","credit",details);
+			TransactionDetails t=new TransactionDetails(c.getAccountNumber(),c.getBalance(),amount,"","credit",details,date);
 			transRepo.save(t);
 			return new ResponseEntity<>(request, HttpStatus.OK);
 		}
@@ -108,6 +117,17 @@ public class AtmServiceImp implements AtmService {
 		Collections.reverse(records);
 		return records;
 		}
+
+		@Override
+		public ResponseEntity<Object> updateProfile(Customer c){
+				String id=c.getAccountNumber();
+				Customer c1=atmRepo.findById(id).orElse(new Customer());
+				double balance=c1.getBalance();
+				c.setBalance(balance);
+				atmRepo.save(c);
+				return new ResponseEntity<>(c,HttpStatus.OK);
+		}
+
 
 }
 		

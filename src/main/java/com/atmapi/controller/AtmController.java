@@ -8,12 +8,7 @@ import com.atmapi.model.TransactionDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.atmapi.model.Customer;
 import com.atmapi.services.AtmServiceImp;
@@ -71,7 +66,7 @@ public class AtmController {
 
 	@RequestMapping(method=RequestMethod.GET, value="/transactionDetails")
 	@CrossOrigin(origins="http://localhost:3000")
-	public List<TransactionDetails> transferMoney(@RequestParam(value = "accountNumber") String accountNumber) {
+	public List<TransactionDetails> transactionDetails(@RequestParam(value = "accountNumber") String accountNumber) {
 		return atmServiceImp.getTransactionDetails(accountNumber);
 
 
@@ -79,10 +74,17 @@ public class AtmController {
 
 
 
+
+	@RequestMapping(method=RequestMethod.PUT, value="/updateProfile")
+	@CrossOrigin(origins="http://localhost:3000")
+	public ResponseEntity<Object> updateProfile(@RequestBody Customer c) {
+		return atmServiceImp.updateProfile(c);
+
+	}
 	//For Testing
 	@RequestMapping(method=RequestMethod.POST, value="/addData")
-	public ResponseEntity<Object> addData(@RequestBody Customer c1) {
-		atmServiceImp.addData(c1);
+	public ResponseEntity<Object> addData(@RequestBody Customer c) {
+		atmServiceImp.addData(c);
 		return new ResponseEntity<>(HttpStatus.OK);
 
 	}
